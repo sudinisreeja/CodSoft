@@ -1,0 +1,33 @@
+def chatbot():
+    print("Hello! I'm a simple chatbot. How can I assist you today?")
+    
+    while True:
+        user_input = input().lower()
+        
+        # Basic responses
+        if "hello" in user_input or "hi" in user_input:
+            print("Hello! How can I help you?")
+        elif "how are you" in user_input:
+            print("I'm doing great,thanks for asking!How about you?")
+        elif "good" in user_input:
+            print("Great Anything specific on your mind,or just chilling")
+        elif "yes i have" in user_input:
+            print("Got it!What do you wanna talk about?")
+        elif "no" in user_input:
+            print("Okay!Just let me know if you feel like chatting about something")
+        elif "your name" in user_input:
+            print("I'm AI Chatbot, your virtual assistant.")
+        elif "what can you do" in user_input:
+            print("I can chat with you and respond to some basic questions. Try asking me something!")
+        elif "codsoft" in user_input:
+            print("CodSoft is the best platform to get internship and improve your knowledge")
+        elif "what are the colors in the rainbow" in user_input:
+            print(" There are seven colors in a rainbow:red,orange,yellow,green,blue,indigo,and violet. The order of the color in a rainbow is always the same,and commonly remebered using the acronym VIBGYOR.")
+        elif "bye" in user_input or "exit" in user_input:
+            print("Goodbye! Have a great day!")
+            break
+        else:
+            print("I'm sorry, I didn't understand that. Could you rephrase?")
+
+# Run the chatbot
+chatbot()
