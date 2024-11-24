@@ -1,0 +1,128 @@
+import math
+
+# Function to initialize the board
+def initialize_board():
+    return [['-' for _ in range(3)] for _ in range(3)]
+
+# Function to print the board
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+    print("\n")
+
+# Function to check if a player has won
+def check_winner(board):
+    # Check rows, columns, and diagonals
+    for row in board:
+        if row[0] == row[1] == row[2] != '-':
+            return row[0]
+    for col in range(3):
+        if board[0][col] == board[1][col] == board[2][col] != '-':
+            return board[0][col]
+    if board[0][0] == board[1][1] == board[2][2] != '-':
+        return board[0][0]
+    if board[0][2] == board[1][1] == board[2][0] != '-':
+        return board[0][2]
+    return None
+
+# Function to check if the board is full
+def is_full(board):
+    return all(cell != '-' for row in board for cell in row)
+
+# Minimax function with Alpha-Beta pruning
+def minimax(board, depth, is_maximizing, alpha, beta):
+    winner = check_winner(board)
+    if winner == 'O':  # AI wins
+        return 10 - depth
+    if winner == 'X':  # Human wins
+        return depth - 10
+    if is_full(board):  # Draw
+        return 0
+
+    if is_maximizing:
+        max_eval = -math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == '-':
+                    board[i][j] = 'O'
+                    eval = minimax(board, depth + 1, False, alpha, beta)
+                    board[i][j] = '-'
+                    max_eval = max(max_eval, eval)
+                    alpha = max(alpha, eval)
+                    if beta <= alpha:
+                        break
+        return max_eval
+    else:
+        min_eval = math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == '-':
+                    board[i][j] = 'X'
+                    eval = minimax(board, depth + 1, True, alpha, beta)
+                    board[i][j] = '-'
+                    min_eval = min(min_eval, eval)
+                    beta = min(beta, eval)
+                    if beta <= alpha:
+                        break
+        return min_eval
+
+# AI Move function
+def ai_move(board):
+    best_score = -math.inf
+    move = None
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == '-':
+                board[i][j] = 'O'
+                score = minimax(board, 0, False, -math.inf, math.inf)
+                board[i][j] = '-'
+                if score > best_score:
+                    best_score = score
+                    move = (i, j)
+    board[move[0]][move[1]] = 'O'
+
+# Function to handle human move
+def human_move(board):
+    while True:
+        try:
+            move = input("Enter your move (row and column, 0-indexed, separated by a space): ")
+            x, y = map(int, move.split())
+            if board[x][y] == '-':
+                board[x][y] = 'X'
+                break
+            else:
+                print("Cell is already occupied. Try again.")
+        except (ValueError, IndexError):
+            print("Invalid input. Enter row and column as two numbers separated by a space.")
+
+# Main game loop
+def play_game():
+    board = initialize_board()
+    print("Welcome to Tic-Tac-Toe! You are 'X'. AI is 'O'.")
+    print_board(board)
+
+    while True:
+        # Human move
+        human_move(board)
+        print_board(board)
+        if check_winner(board) == 'X':
+            print("Congratulations! You win!")
+            break
+        if is_full(board):
+            print("It's a draw!")
+            break
+
+        # AI move
+        print("AI is making a move...")
+        ai_move(board)
+        print_board(board)
+        if check_winner(board) == 'O':
+            print("AI wins! Better luck next time.")
+            break
+        if is_full(board):
+            print("It's a draw!")
+            break
+
+# Start the game
+if __name__ == "__main__":
+    play_game()
